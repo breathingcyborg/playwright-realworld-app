@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { SigninPage } from '../pages/signin.page';
-import { getAllUsers } from '../helpers/database';
-import { PASSWORD } from '../constants';
+import { DEFAULT_PASSWORD } from '../constants';
 import { User } from 'models';
 import { SignupPage } from '../pages/signup.page';
 import { createFakeUser } from '../../scripts/seedDataUtils';
@@ -9,6 +8,7 @@ import { OnboardingPage } from '../pages/onboarding.page';
 import { BankAccountFormPage } from '../pages/bank-account-form.page';
 import faker from '@faker-js/faker';
 import { HOME_URL_REGEX, SIGNIN_URL_REGEX } from '../regexes';
+import { getUsersForTest } from '../helpers/get-users-for-test';
 
 test.describe('Login', () => {
 
@@ -16,8 +16,8 @@ test.describe('Login', () => {
 
     test.beforeAll(async () => {
         // find user
-        const response = await getAllUsers();
-        user = response.results[0];
+        const response = await getUsersForTest('login');
+        user = response[0];
     });
 
     test('should redirect unauthenticated user to signin page', async ({ page }) => {
@@ -31,7 +31,7 @@ test.describe('Login', () => {
         await signinPage.goto();
         
         // submit form
-        await signinPage.fillForm(user.username, PASSWORD, false);
+        await signinPage.fillForm(user.username, DEFAULT_PASSWORD, false);
         await signinPage.submitForm();
 
         // check logged in
@@ -44,7 +44,7 @@ test.describe('Login', () => {
         await signinPage.goto();
 
         // submit form
-        await signinPage.fillForm(user.username, PASSWORD, true);
+        await signinPage.fillForm(user.username, DEFAULT_PASSWORD, true);
         await signinPage.submitForm();
 
         // check cookie
@@ -74,7 +74,7 @@ test.describe('Login', () => {
         await signinPage.goto();
 
         const invalidUserName = 'thisusernamedoesnotexist';
-        await signinPage.fillForm(invalidUserName, PASSWORD, false);
+        await signinPage.fillForm(invalidUserName, DEFAULT_PASSWORD, false);
 
         await signinPage.submitForm();
         await expect(signinPage.getServerError()).toBeVisible();
@@ -103,15 +103,15 @@ test.describe('Signup', () => {
         await signupPage.fillAndBlurFirstName(user.firstName);
         await signupPage.fillAndBlurLastName(user.lastName);
         await signupPage.fillAndBlurUsername(user.username);
-        await signupPage.fillAndBlurPassword(PASSWORD);
-        await signupPage.fillAndBlurConfirmPassword(PASSWORD);
+        await signupPage.fillAndBlurPassword(DEFAULT_PASSWORD);
+        await signupPage.fillAndBlurConfirmPassword(DEFAULT_PASSWORD);
 
         await signupPage.submitForm();
         await page.waitForURL(SIGNIN_URL_REGEX);
         
         const signinPage = new SigninPage(page);
         await signinPage.fillUsernameAndBlur(user.username);
-        await signinPage.fillPasswordAndBlur(PASSWORD);
+        await signinPage.fillPasswordAndBlur(DEFAULT_PASSWORD);
         await signinPage.submitForm();
 
         await expect(page).toHaveURL(HOME_URL_REGEX);

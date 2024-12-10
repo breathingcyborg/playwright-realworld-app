@@ -12,4 +12,8 @@ export class AppPage {
     forceLogout() {
         return this.logoutButton.click({ force: true })
     }
+
+    getHamMenu() {
+        return this.hamMenu;
+    }
 }
