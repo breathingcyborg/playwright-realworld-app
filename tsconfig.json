@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.{js,ts,jsx,tsx}", "scripts", "backend", "src/utils/portUtils.ts"]
+  "include": ["src/**/*.{js,ts,jsx,tsx}", "scripts", "backend", "tests", "src/utils/portUtils.ts"]
 }
