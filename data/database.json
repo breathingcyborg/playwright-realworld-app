@@ -449,39 +449,6 @@
       "balance": 195690,
       "createdAt": "2024-01-21T00:48:05.548Z",
       "modifiedAt": "2024-12-10T02:36:23.402Z"
-    },
-    {
-      "id": "Ajc3OHVEu",
-      "uuid": "f4e7dbd3-1af4-4f8d-bf31-3b2028f3362c",
-      "firstName": "Winona",
-      "lastName": "Skiles",
-      "username": "Alyce_Padberg",
-      "password": "$2a$10$b55ET8Wp1l6uDYyTcmcu6ujLnxqQbvscDPz0t7r..tHePfPuvQ/a6",
-      "balance": 0,
-      "createdAt": "2024-12-10T12:27:03.510Z",
-      "modifiedAt": "2024-12-10T12:27:03.510Z"
-    },
-    {
-      "id": "UXRjQ5xIQ",
-      "uuid": "f52eed9e-b0dc-4324-afed-d4316bc5559e",
-      "firstName": "Virginia",
-      "lastName": "Boyle",
-      "username": "Jewel56",
-      "password": "$2a$10$a16CgybfklCGUmZXSVW8x.Snhgl1.QXtIeV2oj5RN7biQwn/oYtRm",
-      "balance": 0,
-      "createdAt": "2024-12-10T12:27:16.800Z",
-      "modifiedAt": "2024-12-10T12:27:16.800Z"
-    },
-    {
-      "id": "7YjQqf99W",
-      "uuid": "ad816921-b7bc-44b9-b73e-149d13fcb82a",
-      "firstName": "Millie",
-      "lastName": "Heathcote",
-      "username": "Melisa_Feest",
-      "password": "$2a$10$tJxsGSY./rd9X8MasCHJB.bkUipV.CPZCCzZVcXfgshf8uQA80V7q",
-      "balance": 0,
-      "createdAt": "2024-12-10T12:27:37.584Z",
-      "modifiedAt": "2024-12-10T12:27:37.584Z"
     }
   ],
   "contacts": [
@@ -1536,39 +1503,6 @@
       "isDeleted": false,
       "createdAt": "2024-01-24T06:19:11.344Z",
       "modifiedAt": "2024-12-10T01:13:12.974Z"
-    },
-    {
-      "id": "lE622qTlq",
-      "uuid": "d1f1bfa9-5069-49d4-9bcd-f18232d34404",
-      "userId": "Ajc3OHVEu",
-      "bankName": "Parisian, Ritchie and Gutkowski Bank",
-      "accountNumber": "8567684863",
-      "routingNumber": "101775185",
-      "isDeleted": false,
-      "createdAt": "2024-12-10T12:27:06.738Z",
-      "modifiedAt": "2024-12-10T12:27:06.739Z"
-    },
-    {
-      "id": "5UexMQq95",
-      "uuid": "ee1f17a0-d2f5-4922-ab75-df79584099d8",
-      "userId": "UXRjQ5xIQ",
-      "bankName": "Bartoletti, Waters and Bartell Bank",
-      "accountNumber": "7992947100",
-      "routingNumber": "678002513",
-      "isDeleted": false,
-      "createdAt": "2024-12-10T12:27:21.863Z",
-      "modifiedAt": "2024-12-10T12:27:21.863Z"
-    },
-    {
-      "id": "mAy4_nrbt",
-      "uuid": "9e3ac471-d673-4891-b547-791af2079559",
-      "userId": "7YjQqf99W",
-      "bankName": "Rowe, Weimann and Wintheiser Bank",
-      "accountNumber": "7654506982",
-      "routingNumber": "498754271",
-      "isDeleted": false,
-      "createdAt": "2024-12-10T12:27:43.208Z",
-      "modifiedAt": "2024-12-10T12:27:43.208Z"
     }
   ],
   "transactions": [
