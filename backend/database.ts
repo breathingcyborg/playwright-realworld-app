@@ -21,6 +21,7 @@ import {
 import { isWithinInterval } from "date-fns";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
+import Memory from "lowdb/adapters/Memory";
 import shortid from "shortid";
 import {
   BankAccount,
@@ -87,7 +88,8 @@ const NOTIFICATION_TABLE = "notifications";
 const BANK_TRANSFER_TABLE = "banktransfers";
 
 const databaseFile = path.join(__dirname, "../data/database.json");
-const adapter = new FileSync<DbSchema>(databaseFile);
+const content = JSON.parse(fs.readFileSync(databaseFile, "utf8"));
+const adapter = new Memory<DbSchema>(databaseFile, { defaultValue: content });
 
 const db = low(adapter);
 
