@@ -30,6 +30,7 @@
     "@xstate/react": "3.2.2",
     "aws-amplify": "^6.0.16",
     "axios": "0.28.1",
+    "axios-retry": "^4.5.0",
     "clsx": "1.2.1",
     "date-fns": "2.30.0",
     "detect-port": "^1.5.1",
@@ -147,7 +148,9 @@
     "tsnode:not-instrumented": "ts-node -P tsconfig.tsnode.json",
     "prebuild": "yarn types",
     "build": "vite build",
-    "postinstall": "husky install && patch-package"
+    "postinstall": "husky install && patch-package",
+    "test:ui": "yarn playwright test --ui",
+    "test": "yarn playwright test"
   },
   "engines": {
     "node": "^18.0.0 || >=20.0.0"
