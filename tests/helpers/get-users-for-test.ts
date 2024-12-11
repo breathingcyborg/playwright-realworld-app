@@ -1,6 +1,6 @@
 import { getAllUsers } from "./database"
 
-type Test = 'login'
+type Test = 'login' | 'bank_accounts'
 
 /**
  * We have 30 (process.env.SEED_USERBASE_SIZE) users we need to allocate 
@@ -14,8 +14,13 @@ export async function getUsersForTest(test: Test) {
     const userBaseSize = parseInt(process.env.SEED_USERBASE_SIZE || '0');
 
     const { results: users } = await getAllUsers();
+
     if (test === 'login') {
         return [ users[0] ];
+    }
+
+    if (test === 'bank_accounts') {
+        return [ users[1] ]
     }
 
     return [];
