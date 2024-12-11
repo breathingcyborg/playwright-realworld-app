@@ -6,6 +6,7 @@ import { AppPage } from "../pages/app.page";
 
 export async function loginUser(user: User, page: Page) {
     const loginPage = new SigninPage(page);
+    await loginPage.goto();
     await loginPage.fillForm(user.username, DEFAULT_PASSWORD, false);
     await loginPage.submitForm();
 
