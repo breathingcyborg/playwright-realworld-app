@@ -77,7 +77,7 @@ test('soft delete bank account', async ({ pages: { page, listPage, formPage } })
     await deleteApiCall;
 
     // Check bank account was deleted
-    await expect(listPage.getLastBankRow({ bankName, deleted: false })).toBeVisible();
+    await expect(listPage.getLastBankRow({ bankName, deleted: true })).toBeVisible();
 });
 
 
