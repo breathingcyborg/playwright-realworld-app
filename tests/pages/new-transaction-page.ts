@@ -10,13 +10,17 @@ export class NewTransactionPage extends AppPage {
     private requestButton : Locator;
     private payButton : Locator;
     private returnToTransactionsButton: Locator;
+    private amountErrorMessage : Locator;
+    private descriptionErrorMessage : Locator;
 
     constructor(protected page : Page) {
         super(page)
         this.userListSearchInput = this.page.getByTestId("user-list-search-input");
         this.usersList = this.page.getByTestId("users-list");
         this.amountInput = this.page.locator("#amount");
+        this.amountErrorMessage = this.page.locator("#transaction-create-amount-input-helper-text");
         this.descriptionInput = this.page.locator("#transaction-create-description-input");
+        this.descriptionErrorMessage = this.page.locator("#transaction-create-description-input-helper-text");
         this.requestButton = this.page.getByTestId("transaction-create-submit-request");
         this.payButton = this.page.getByTestId("transaction-create-submit-payment");
         this.returnToTransactionsButton =this.page.getByTestId("new-transaction-return-to-transactions");
@@ -28,6 +32,10 @@ export class NewTransactionPage extends AppPage {
 
     selectUser(input: string) {
         return this.usersList.locator("li").filter({ hasText: input }).click();
+    }
+
+    getUserListItemByUserId(userId: string) {
+        return this.usersList.getByTestId(`user-list-item-${userId}`);
     }
 
     async fillAndBlurAmount(value: string) {
@@ -50,5 +58,21 @@ export class NewTransactionPage extends AppPage {
 
     clickReturnToTransactions() {
         return this.returnToTransactionsButton.click();
+    }
+
+    getAmountErrorMessage() {
+        return this.amountErrorMessage;
+    }
+
+    getDescriptionErrorMessage() {
+        return this.descriptionErrorMessage;
+    }
+
+    getRequestButton() {
+        return this.requestButton;
+    }
+
+    getPayButton() {
+        return this.payButton;
     }
 }
