@@ -1,232 +1,231 @@
-import { Page, test, expect } from '@playwright/test';
-import { User } from 'models';
-import { getUsersForTest } from '../helpers/get-users-for-test';
-import { loginUser } from '../helpers/login-user';
-import { NewTransactionPage } from '../pages/new-transaction-page';
-import { TransactionsListPage } from '../pages/transactions-list-page';
-import { createTransaction } from '../helpers/create-transaction';
-import { checkFirstTransaction } from '../helpers/check-first-transaction';
-import { checkSuccessToast } from '../helpers/check-success-toast';
-import { checkBalance } from '../helpers/check-balance';
+import { Page, test, expect } from "@playwright/test";
+import { User } from "models";
+import { getUsersForTest } from "../helpers/get-users-for-test";
+import { loginUser } from "../helpers/login-user";
+import { NewTransactionPage } from "../pages/new-transaction-page";
+import { TransactionsListPage } from "../pages/transactions-list-page";
+import { createTransaction } from "../helpers/create-transaction";
+import { checkFirstTransaction } from "../helpers/check-first-transaction";
+import { checkSuccessToast } from "../helpers/check-success-toast";
+import { checkBalance } from "../helpers/check-balance";
 
-test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: "serial" });
 
-let sender : User;
-let receiver : User;
-let page : Page;
-let newTransactionPage : NewTransactionPage;
-let transactionsListPage : TransactionsListPage;
+let sender: User;
+let receiver: User;
+let page: Page;
+let newTransactionPage: NewTransactionPage;
+let transactionsListPage: TransactionsListPage;
 
 test.beforeEach(async ({ page: browserPage }) => {
-    [sender, receiver] = await getUsersForTest('new_transactions');
-    await loginUser(sender, browserPage);
-    page = browserPage;
-    newTransactionPage = new NewTransactionPage(page);
-    transactionsListPage = new TransactionsListPage(page);
-})
-
-test('user can submit payment', async ({ }) => {
-
-    const amount = 10;
-    const description = "For coffee";
-
-    const startBalance = await newTransactionPage.getBalance();
-    const expectedEndBalance = startBalance! - (amount * 100);
-
-    // create transaction
-    await createTransaction({
-        page: newTransactionPage,
-        amount,
-        description,
-        receiver,
-        type: 'payment'
-    })
-    
-    // check success toast
-    await checkSuccessToast({
-        page: newTransactionPage,
-        text: 'Transaction Submitted!'
-    });
-
-    // check end balance
-    await checkBalance({ page: newTransactionPage, balance: expectedEndBalance });
-
-    // return to transactions list
-    await newTransactionPage.clickReturnToTransactions();
-
-    // check transaction is displayed
-    await checkFirstTransaction({ 
-        page: new TransactionsListPage(page),
-        description
-    })
+  [sender, receiver] = await getUsersForTest("new_transactions");
+  await loginUser(sender, browserPage);
+  page = browserPage;
+  newTransactionPage = new NewTransactionPage(page);
+  transactionsListPage = new TransactionsListPage(page);
 });
 
-test('user can submit request', async ({ }) => {
-    const amount = 10;
-    const description = "For Tea";
+test("user can submit payment", async ({}) => {
+  const amount = 10;
+  const description = "For coffee";
 
-    await createTransaction({
-        page: newTransactionPage,
-        amount,
-        description,
-        receiver,
-        type: 'request'
-    });
- 
-    // check success toast
-    await checkSuccessToast({
-        page: newTransactionPage,
-        text: 'Transaction Submitted!'
-    });
+  const startBalance = await newTransactionPage.getBalance();
+  const expectedEndBalance = startBalance! - amount * 100;
 
-    // return to transactions list
-    await newTransactionPage.clickReturnToTransactions();
+  // create transaction
+  await createTransaction({
+    page: newTransactionPage,
+    amount,
+    description,
+    receiver,
+    type: "payment",
+  });
 
-    // check transaction is displayed
-    await checkFirstTransaction({ 
-        page: new TransactionsListPage(page),
-        description
-    })
+  // check success toast
+  await checkSuccessToast({
+    page: newTransactionPage,
+    text: "Transaction Submitted!",
+  });
+
+  // check end balance
+  await checkBalance({ page: newTransactionPage, balance: expectedEndBalance });
+
+  // return to transactions list
+  await newTransactionPage.clickReturnToTransactions();
+
+  // check transaction is displayed
+  await checkFirstTransaction({
+    page: new TransactionsListPage(page),
+    description,
+  });
 });
 
-test('payment is displayed to the receiver', async () => {
-     
-    const amount = 10;
-    const description = "For Vada";
+test("user can submit request", async ({}) => {
+  const amount = 10;
+  const description = "For Tea";
 
-    // expected account balance after transaction
-    const expectedReceiverEndBalance = receiver.balance + (amount * 100);
+  await createTransaction({
+    page: newTransactionPage,
+    amount,
+    description,
+    receiver,
+    type: "request",
+  });
 
-    // create transaction
-    await createTransaction({
-        page: newTransactionPage,
-        amount,
-        description,
-        receiver,
-        type: 'payment'
-    });
+  // check success toast
+  await checkSuccessToast({
+    page: newTransactionPage,
+    text: "Transaction Submitted!",
+  });
 
-    // check success toast
-    await checkSuccessToast({
-        page: newTransactionPage,
-        text: 'Transaction Submitted!'
-    });
+  // return to transactions list
+  await newTransactionPage.clickReturnToTransactions();
 
-    // logout
-    await newTransactionPage.forceLogout();
-
-    // login as receiver
-    await loginUser(receiver, page);
-
-    // check receivers new balance
-    await checkBalance({ page: newTransactionPage, balance: expectedReceiverEndBalance });
+  // check transaction is displayed
+  await checkFirstTransaction({
+    page: new TransactionsListPage(page),
+    description,
+  });
 });
 
-test('request is displayed to the receiver', async () => {
-     
-    const amount = 10;
-    const description = "For Dosa";
+test("payment is displayed to the receiver", async () => {
+  const amount = 10;
+  const description = "For Vada";
 
-    // create transaction
-    await createTransaction({
-        page: newTransactionPage,
-        amount,
-        description,
-        receiver,
-        type: 'request'
-    });
+  // expected account balance after transaction
+  const expectedReceiverEndBalance = receiver.balance + amount * 100;
 
-    // check success toast
-    await checkSuccessToast({
-        page: newTransactionPage,
-        text: 'Transaction Submitted!'
-    });
+  // create transaction
+  await createTransaction({
+    page: newTransactionPage,
+    amount,
+    description,
+    receiver,
+    type: "payment",
+  });
 
-    // logout
-    await newTransactionPage.forceLogout();
+  // check success toast
+  await checkSuccessToast({
+    page: newTransactionPage,
+    text: "Transaction Submitted!",
+  });
 
-    // login as receiver
-    await loginUser(receiver, page);
+  // logout
+  await newTransactionPage.forceLogout();
 
-    // go to transactions list page
-    await transactionsListPage.goto();
+  // login as receiver
+  await loginUser(receiver, page);
 
-    // click personal transactions tab
-    await transactionsListPage.gotoPersonalTransactions();
-
-    // check first personal transaction
-    await checkFirstTransaction({ page: transactionsListPage, description });
+  // check receivers new balance
+  await checkBalance({ page: newTransactionPage, balance: expectedReceiverEndBalance });
 });
 
-test('search user by attributes (firstName, lastName, username, email, phoneNumber)', async () => {
+test("request is displayed to the receiver", async () => {
+  const amount = 10;
+  const description = "For Dosa";
 
-    for (const attributeName of ['firstName', 'lastName', 'username', 'email', 'phoneNumber'] as const) {
-        const attribute = receiver[attributeName];
+  // create transaction
+  await createTransaction({
+    page: newTransactionPage,
+    amount,
+    description,
+    receiver,
+    type: "request",
+  });
 
-        await newTransactionPage.clickNewTransactions();
+  // check success toast
+  await checkSuccessToast({
+    page: newTransactionPage,
+    text: "Transaction Submitted!",
+  });
 
-        const search = page.waitForResponse(/users\/search/)
+  // logout
+  await newTransactionPage.forceLogout();
 
-        await newTransactionPage.searchUser(attribute);
-        
-        await search;
+  // login as receiver
+  await loginUser(receiver, page);
 
-        await expect(newTransactionPage.getUserListItemByUserId(receiver.id)).toBeVisible();
-    }
+  // go to transactions list page
+  await transactionsListPage.goto();
 
+  // click personal transactions tab
+  await transactionsListPage.gotoPersonalTransactions();
+
+  // check first personal transaction
+  await checkFirstTransaction({ page: transactionsListPage, description });
 });
 
-test('when insufficient fund user can submit payment by withdrawing from bank', async ({ }) => {
-
-    const startBalance = await newTransactionPage.getBalance() || 0;
-
-    const amount = (startBalance/100) + 10;
-    const description = "Free lunch";
-
-    const expectedEndBalance = 0;
-
-    // create transaction
-    await createTransaction({
-        page: newTransactionPage,
-        amount,
-        description,
-        receiver,
-        type: 'payment'
-    })
-    
-    // check success toast
-    await checkSuccessToast({
-        page: newTransactionPage,
-        text: 'Transaction Submitted!'
-    });
-
-    // check end balance
-    await checkBalance({ page: newTransactionPage, balance: expectedEndBalance });
-
-    // return to transactions list
-    await newTransactionPage.clickReturnToTransactions();
-
-    // check transaction is displayed
-    await checkFirstTransaction({ 
-        page: new TransactionsListPage(page),
-        description
-    })
-});
-
-test('shows form errors', async ({ }) => {
+test("search user by attributes (firstName, lastName, username, email, phoneNumber)", async () => {
+  for (const attributeName of [
+    "firstName",
+    "lastName",
+    "username",
+    "email",
+    "phoneNumber",
+  ] as const) {
+    const attribute = receiver[attributeName];
 
     await newTransactionPage.clickNewTransactions();
 
-    // select user
-    await newTransactionPage.searchUser(receiver.username);
-    await newTransactionPage.selectUser(receiver.username);
-    
-    await newTransactionPage.fillAndBlurAmount('');
-    await expect(newTransactionPage.getAmountErrorMessage()).toBeVisible();
+    const search = page.waitForResponse(/users\/search/);
 
-    await newTransactionPage.fillAndBlurDescription('');
-    await expect(newTransactionPage.getDescriptionErrorMessage()).toBeVisible();
+    await newTransactionPage.searchUser(attribute);
 
-    await expect(newTransactionPage.getPayButton()).toBeDisabled();
-    await expect(newTransactionPage.getRequestButton()).toBeDisabled();
+    await search;
+
+    await expect(newTransactionPage.getUserListItemByUserId(receiver.id)).toBeVisible();
+  }
+});
+
+test("when insufficient fund user can submit payment by withdrawing from bank", async ({}) => {
+  const startBalance = (await newTransactionPage.getBalance()) || 0;
+
+  const amount = startBalance / 100 + 10;
+  const description = "Free lunch";
+
+  const expectedEndBalance = 0;
+
+  // create transaction
+  await createTransaction({
+    page: newTransactionPage,
+    amount,
+    description,
+    receiver,
+    type: "payment",
+  });
+
+  // check success toast
+  await checkSuccessToast({
+    page: newTransactionPage,
+    text: "Transaction Submitted!",
+  });
+
+  // check end balance
+  await checkBalance({ page: newTransactionPage, balance: expectedEndBalance });
+
+  // return to transactions list
+  await newTransactionPage.clickReturnToTransactions();
+
+  // check transaction is displayed
+  await checkFirstTransaction({
+    page: new TransactionsListPage(page),
+    description,
+  });
+});
+
+test("shows form errors", async ({}) => {
+  await newTransactionPage.clickNewTransactions();
+
+  // select user
+  await newTransactionPage.searchUser(receiver.username);
+  await newTransactionPage.selectUser(receiver.username);
+
+  await newTransactionPage.fillAndBlurAmount("");
+  await expect(newTransactionPage.getAmountErrorMessage()).toBeVisible();
+
+  await newTransactionPage.fillAndBlurDescription("");
+  await expect(newTransactionPage.getDescriptionErrorMessage()).toBeVisible();
+
+  await expect(newTransactionPage.getPayButton()).toBeDisabled();
+  await expect(newTransactionPage.getRequestButton()).toBeDisabled();
 });

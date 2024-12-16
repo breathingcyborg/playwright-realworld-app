@@ -1,15 +1,14 @@
-
-import 'dotenv/config'
-import { defineConfig, devices } from '@playwright/test';
-import { FRONTEND_URL, BACKEND_HEALTH_URL, BACKEND_URL } from './tests/constants';
+import "dotenv/config";
+import { defineConfig, devices } from "@playwright/test";
+import { FRONTEND_URL, BACKEND_HEALTH_URL, BACKEND_URL } from "./tests/constants";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
 
-  testMatch: '**\/*.@(spec|test).?(c|m)[jt]s?(x)',
+  testMatch: "**/*.@(spec|test).?(c|m)[jt]s?(x)",
 
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -20,30 +19,30 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: FRONTEND_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
 
     /** Test id attribute used by getByTestId  */
-    testIdAttribute: 'data-test',
+    testIdAttribute: "data-test",
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'setup db',
+      name: "setup db",
       testMatch: /tests\/global\.setup\.ts/,
     },
 
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-      dependencies: ['setup db'],
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup db"],
     },
 
     // {
@@ -87,13 +86,13 @@ export default defineConfig({
   // },
   webServer: [
     {
-      command: 'yarn start:api',
+      command: "yarn start:api",
       url: BACKEND_HEALTH_URL,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'yarn start:react',
+      command: "yarn start:react",
       url: FRONTEND_URL,
       timeout: 120 * 1000,
       reuseExistingServer: !process.env.CI,
