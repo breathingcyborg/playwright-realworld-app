@@ -585,10 +585,14 @@ export const updateTransactionById = (transactionId: string, edits: Partial<Tran
 
   // if payment, debit sender's balance for payment amount
   if (isRequestTransaction(transaction)) {
-    debitPayAppBalance(receiver, transaction);
-    creditPayAppBalance(sender, transaction);
     edits.status = TransactionStatus.complete;
 
+    if (edits.requestStatus !== 'accepted') {
+      return
+    }
+
+    debitPayAppBalance(receiver, transaction);
+    creditPayAppBalance(sender, transaction);
     createPaymentNotification(
       transaction.senderId,
       transaction.id,
