@@ -3,10 +3,20 @@ import { Locator, Page } from "@playwright/test";
 export class AppPage {
     private readonly hamMenu : Locator;
     private readonly logoutButton : Locator;
+    private readonly newTransactionButton : Locator;
+    private readonly userBalance : Locator;
+    private readonly successToast : Locator;
 
     constructor(protected readonly page: Page) {
         this.hamMenu = page.getByTestId('sidenav-toggle');
         this.logoutButton = page.getByTestId('sidenav-signout');
+        this.newTransactionButton = page.getByTestId("nav-top-new-transaction");
+        this.userBalance = page.getByTestId("sidenav-user-balance");
+        this.successToast = page.getByTestId("alert-bar-success");
+    }
+
+    getSuccessToast() {
+        return this.successToast;
     }
 
     forceLogout() {
@@ -15,5 +25,26 @@ export class AppPage {
 
     getHamMenu() {
         return this.hamMenu;
+    }
+
+    clickNewTransactions() {
+        return this.newTransactionButton.click({ force: true })
+    }
+
+    async getBalance() {
+        await this.userBalance.waitFor({ state: "attached" });
+        const text = await this.userBalance.textContent();
+        if (!text) {
+            return null;
+        }
+        const balance = parseFloat(text.replace("$", "").replace(",", ""));
+        if (isNaN(balance) || !isFinite(balance)) {
+            return null;
+        }
+        return Math.floor(balance * 100);
+    }
+
+    getUserBalanceLocator() {
+        return this.userBalance;
     }
 }

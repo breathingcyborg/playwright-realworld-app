@@ -1,4 +1,4 @@
-import { Page, Response, test as base, expect } from '@playwright/test';
+import { Page, test as base, expect } from '@playwright/test';
 import { getUsersForTest } from '../helpers/get-users-for-test';
 import { loginUser } from '../helpers/login-user';
 import { BankAccountFormPage } from '../pages/bank-account-form.page';
@@ -26,9 +26,7 @@ test('create bank account', async ({ pages: { formPage, listPage, page } }) => {
     await listPage.goto();
     await listPage.clickCreateButton();
 
-    // Wait for form to load
     await expect(page).toHaveURL(CREATE_BANK_ACCOUNT_URL_REGEX);
-    await formPage.waitForLoad();
     
     // Submit form
     const bankName = `${faker.company.companyName()} Bank`;
@@ -41,11 +39,7 @@ test('create bank account', async ({ pages: { formPage, listPage, page } }) => {
     await expect(page).toHaveURL(LIST_BANK_ACCOUNTS_URL_REGEX);
 
     // check bank was created
-    await expect(
-        listPage.getBankRowLocator()
-        .filter({ hasText: bankName, hasNotText: /\(deleted\)/i })
-        .last()
-    ).toBeVisible();
+    await expect(listPage.getLastBankRow({ bankName, deleted: false })).toBeVisible();
 });
 
 
@@ -54,9 +48,7 @@ test('soft delete bank account', async ({ pages: { page, listPage, formPage } })
     await listPage.goto();
     await listPage.clickCreateButton();
 
-    // Wait for form to load
     await expect(page).toHaveURL(CREATE_BANK_ACCOUNT_URL_REGEX);
-    await formPage.waitForLoad();
     
     // Submit form
     const bankName = `${faker.company.companyName()} Bank`;
@@ -69,11 +61,7 @@ test('soft delete bank account', async ({ pages: { page, listPage, formPage } })
     await expect(page).toHaveURL(LIST_BANK_ACCOUNTS_URL_REGEX);
 
     // check bank was created
-    await expect(
-        listPage.getBankRowLocator()
-        .filter({ hasText: bankName, hasNotText: /\(deleted\)/i })
-        .last()
-    ).toBeVisible();
+    await expect(listPage.getLastBankRow({ bankName, deleted: false })).toBeVisible();
 
     // listen for delete and list
     const deleteApiCall = page.waitForResponse((response) => {
@@ -89,11 +77,7 @@ test('soft delete bank account', async ({ pages: { page, listPage, formPage } })
     await deleteApiCall;
 
     // Check bank account was deleted
-    await expect(
-        listPage.getBankRowLocator()
-        .filter({ hasText: bankName + ' (Deleted)' })
-        .last()
-    ).toBeVisible();
+    await expect(listPage.getLastBankRow({ bankName, deleted: false })).toBeVisible();
 });
 
 
@@ -102,9 +86,7 @@ test('should display bank account form errors', async ({ pages: { formPage, list
     await listPage.goto();
     await listPage.clickCreateButton();
 
-    // Wait for form to load
     await expect(page).toHaveURL(CREATE_BANK_ACCOUNT_URL_REGEX);
-    await formPage.waitForLoad();
     
     // Bank name
     await formPage.fillAndBlurBankName('');

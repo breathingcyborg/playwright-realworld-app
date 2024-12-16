@@ -23,7 +23,7 @@ export class BankAccountListPage extends AppPage  {
         await this.list.waitFor({ state: 'visible' })
     }
 
-    getBankRowLocator() {
+    private getBankRowLocator() {
         return this.page.locator('[data-test^="bankaccount-list-item"]')
     }
 
@@ -32,5 +32,14 @@ export class BankAccountListPage extends AppPage  {
             .filter({ hasText: name, hasNotText: /\(deleted\)/i })
             .getByTestId("bankaccount-delete")
             .click();
+    }
+
+    getLastBankRow({ bankName, deleted = false }: { deleted?: boolean, bankName: string }) {
+        const hasText = deleted ? bankName + ' (Deleted)' : bankName;
+        const hasNotText = deleted ? undefined: /\(deleted\)/i;
+    
+        return this.getBankRowLocator()
+            .filter({ hasText, hasNotText })
+            .last()
     }
 }

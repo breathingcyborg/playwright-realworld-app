@@ -55,10 +55,6 @@ export class BankAccountFormPage extends AppPage {
         await this.submitButton.click()
     }
 
-    async waitForLoad() {
-        return this.form.waitFor({ state: 'visible' });
-    }
-
     getBankNameErrorText() {
         return this.bankNameHelperText;
     }
