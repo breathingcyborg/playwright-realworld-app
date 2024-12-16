@@ -5,6 +5,7 @@ import {
   TransactionResponseItem,
   TransactionDateRangePayload,
   TransactionAmountRangePayload,
+  User,
 } from "../models";
 import TransactionList from "./TransactionList";
 import { contactsTransactionsMachine } from "../machines/contactsTransactionsMachine";
@@ -13,12 +14,14 @@ export interface TransactionContactListProps {
   filterComponent: ReactNode;
   dateRangeFilters: TransactionDateRangePayload;
   amountRangeFilters: TransactionAmountRangePayload;
+  currentUser: User;
 }
 
 const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   filterComponent,
   dateRangeFilters,
   amountRangeFilters,
+  currentUser,
 }) => {
   const [current, send, contactTransactionService] = useMachine(contactsTransactionsMachine);
   const { pageData, results } = current.context;
@@ -39,6 +42,7 @@ const TransactionContactsList: React.FC<TransactionContactListProps> = ({
   return (
     <>
       <TransactionList
+        currentUser={currentUser}
         filterComponent={filterComponent}
         header="Contacts"
         transactions={results as TransactionResponseItem[]}

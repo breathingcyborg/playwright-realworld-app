@@ -5,6 +5,7 @@ import {
   TransactionResponseItem,
   TransactionDateRangePayload,
   TransactionAmountRangePayload,
+  User,
 } from "../models";
 import TransactionList from "./TransactionList";
 import { publicTransactionsMachine } from "../machines/publicTransactionsMachine";
@@ -13,12 +14,14 @@ export interface TransactionPublicListProps {
   filterComponent: ReactNode;
   dateRangeFilters: TransactionDateRangePayload;
   amountRangeFilters: TransactionAmountRangePayload;
+  currentUser: User;
 }
 
 const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   filterComponent,
   dateRangeFilters,
   amountRangeFilters,
+  currentUser,
 }) => {
   const [current, send, publicTransactionService] = useMachine(publicTransactionsMachine);
   const { pageData, results } = current.context;
@@ -45,6 +48,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
         isLoading={current.matches("loading")}
         loadNextPage={loadNextPage}
         pagination={pageData as TransactionPagination}
+        currentUser={currentUser}
         showCreateButton
       />
     </>

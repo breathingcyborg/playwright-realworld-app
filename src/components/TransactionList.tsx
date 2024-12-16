@@ -5,7 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { isEmpty } from "lodash/fp";
 
 import SkeletonList from "./SkeletonList";
-import { TransactionResponseItem, TransactionPagination } from "../models";
+import { TransactionResponseItem, TransactionPagination, User } from "../models";
 import EmptyList from "./EmptyList";
 import TransactionInfiniteList from "./TransactionInfiniteList";
 import TransferMoneyIllustration from "./SvgUndrawTransferMoneyRywa";
@@ -30,6 +30,7 @@ export interface TransactionListProps {
   loadNextPage: Function;
   pagination: TransactionPagination;
   filterComponent: ReactNode;
+  currentUser: User;
 }
 
 const TransactionList: React.FC<TransactionListProps> = ({
@@ -40,6 +41,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
   loadNextPage,
   pagination,
   filterComponent,
+  currentUser,
 }) => {
   const showEmptyList = !isLoading && transactions?.length === 0;
   const showSkeleton = isLoading && isEmpty(pagination);
@@ -51,6 +53,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       {showSkeleton && <SkeletonList />}
       {transactions.length > 0 && (
         <TransactionInfiniteList
+          currentUser={currentUser}
           transactions={transactions}
           loadNextPage={loadNextPage}
           pagination={pagination}

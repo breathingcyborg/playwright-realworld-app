@@ -159,7 +159,7 @@ const TransactionDetail: React.FC<TransactionProps> = ({
           </Grid>
         </Grid>
         <Grid item>
-          <TransactionAmount transaction={transaction} />
+          <TransactionAmount currentUser={currentUser} transaction={transaction} />
         </Grid>
       </Grid>
       <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>

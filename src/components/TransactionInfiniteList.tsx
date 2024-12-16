@@ -6,7 +6,7 @@ import { InfiniteLoader, List, Index } from "react-virtualized";
 import "react-virtualized/styles.css"; // only needs to be imported once
 
 import TransactionItem from "./TransactionItem";
-import { TransactionResponseItem, TransactionPagination } from "../models";
+import { TransactionResponseItem, TransactionPagination, User } from "../models";
 
 const PREFIX = "TransactionInfiniteList";
 
@@ -28,12 +28,14 @@ export interface TransactionListProps {
   transactions: TransactionResponseItem[];
   loadNextPage: Function;
   pagination: TransactionPagination;
+  currentUser: User;
 }
 
 const TransactionInfiniteList: React.FC<TransactionListProps> = ({
   transactions,
   loadNextPage,
   pagination,
+  currentUser,
 }) => {
   const theme = useTheme();
   const isXsBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
@@ -57,7 +59,7 @@ const TransactionInfiniteList: React.FC<TransactionListProps> = ({
     if (index < transactions.length) {
       return (
         <div key={key} style={style}>
-          <TransactionItem transaction={transaction} />
+          <TransactionItem currentUser={currentUser} transaction={transaction} />
           <Divider variant={isMobile ? "fullWidth" : "inset"} />
         </div>
       );

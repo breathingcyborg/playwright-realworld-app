@@ -28,7 +28,38 @@ import {
   omit,
   map,
   drop,
+  cond,
+  constant,
+  eq,
 } from "lodash/fp";
+
+export const transactionSign = (transaction: Transaction, currentUserId: string): "+" | "" | "-" =>
+  flow(
+    cond([
+      // Check if the transaction is a request and the current user is the sender
+      [
+        flow(
+          isRequestTransaction,
+          (isRequest) => isRequest && eq(get("senderId", transaction), currentUserId)
+        ),
+        constant("+"),
+      ],
+      // Check if the transaction is a request and the current user is the receiver
+      [
+        flow(
+          isRequestTransaction,
+          (isRequest) => isRequest && eq(get("receiverId", transaction), currentUserId)
+        ),
+        constant("-"),
+      ],
+      // Check if the transaction is a payment and the current user is the sender
+      [flow(get("senderId"), eq(currentUserId)), constant("-")],
+      // Check if the transaction is a payment and the current user is the receiver
+      [flow(get("receiverId"), eq(currentUserId)), constant("+")],
+      // Default case: Neither sender nor receiver
+      [constant(true), constant("")],
+    ])
+  )(transaction);
 
 export const isRequestTransaction = (transaction: Transaction) =>
   flow(get("requestStatus"), negate(isEmpty))(transaction);

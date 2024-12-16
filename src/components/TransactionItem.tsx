@@ -12,7 +12,7 @@ import {
   Theme,
 } from "@mui/material";
 import { ThumbUpAltOutlined as LikeIcon, CommentRounded as CommentIcon } from "@mui/icons-material";
-import { TransactionResponseItem } from "../models";
+import { TransactionResponseItem, User } from "../models";
 import TransactionTitle from "./TransactionTitle";
 import TransactionAmount from "./TransactionAmount";
 
@@ -62,6 +62,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 type TransactionProps = {
   transaction: TransactionResponseItem;
+  currentUser: User;
 };
 
 const SmallAvatar = styled(Avatar)(({ theme }: { theme: Theme }) => {
@@ -72,7 +73,7 @@ const SmallAvatar = styled(Avatar)(({ theme }: { theme: Theme }) => {
   };
 });
 
-const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
+const TransactionItem: React.FC<TransactionProps> = ({ transaction, currentUser }) => {
   const history = useHistory();
 
   const showTransactionDetail = (transactionId: string) => {
@@ -143,7 +144,7 @@ const TransactionItem: React.FC<TransactionProps> = ({ transaction }) => {
               </Grid>
             </Grid>
             <Grid item>
-              <TransactionAmount transaction={transaction} />
+              <TransactionAmount currentUser={currentUser} transaction={transaction} />
             </Grid>
           </Grid>
         </Grid>
