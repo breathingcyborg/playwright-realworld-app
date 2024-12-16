@@ -95,6 +95,11 @@ const MainLayout: React.FC<Props> = ({ children, notificationsService, authServi
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [aboveSmallBreakpoint, desktopDrawerOpen]);
 
+  // refresh data on load (this updates balance)
+  useEffect(() => {
+    authService.send("REFRESH");
+  }, []);
+
   return (
     <Root>
       <NavBar
