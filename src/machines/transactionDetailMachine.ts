@@ -2,6 +2,7 @@ import { omit, flow, first, isEmpty } from "lodash/fp";
 import { dataMachine } from "./dataMachine";
 import { httpClient } from "../utils/asyncUtils";
 import { backendPort } from "../utils/portUtils";
+import { authService } from "./authMachine";
 
 export const transactionDetailMachine = dataMachine("transactionData").withConfig({
   services: {
@@ -32,6 +33,7 @@ export const transactionDetailMachine = dataMachine("transactionData").withConfi
         `http://localhost:${backendPort}/transactions/${transactionId}`,
         payload
       );
+      authService.send("REFRESH");
       return resp.data;
     },
   },
