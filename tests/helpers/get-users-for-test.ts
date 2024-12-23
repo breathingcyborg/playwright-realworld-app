@@ -1,6 +1,6 @@
 import { getAllUsers } from "./database";
 
-type Test = "login" | "bank_accounts" | "new_transactions" | "transaction_details" | "transactions_feed";
+type Test = "login" | "bank_accounts" | "new_transactions" | "transaction_details" | "transactions_feed" | "user_settings";
 
 /**
  *
@@ -36,6 +36,10 @@ export async function getUsersForTest(test: Test) {
 
   if (test === 'transactions_feed') {
     return [ users[7] ];
+  }
+
+  if (test === 'user_settings') {
+    return [ users[8] ]
   }
 
   return [];
