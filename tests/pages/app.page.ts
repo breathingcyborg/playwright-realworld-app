@@ -7,7 +7,7 @@ export class AppPage {
   private readonly userBalance: Locator;
   private readonly successToast: Locator;
   private readonly userSettings: Locator;
-  public readonly sidebarFullName : Locator;
+  public readonly sidebarFullName: Locator;
 
   constructor(protected readonly page: Page) {
     this.hamMenu = page.getByTestId("sidenav-toggle");
@@ -16,7 +16,7 @@ export class AppPage {
     this.userBalance = page.getByTestId("sidenav-user-balance");
     this.userSettings = page.getByTestId("sidenav-user-settings");
     this.successToast = page.getByTestId("alert-bar-success");
-    this.sidebarFullName = page.getByTestId('sidenav-user-full-name');
+    this.sidebarFullName = page.getByTestId("sidenav-user-full-name");
   }
 
   getSuccessToast() {

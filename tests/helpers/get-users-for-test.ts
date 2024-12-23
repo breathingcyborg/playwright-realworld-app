@@ -1,6 +1,12 @@
 import { getAllUsers } from "./database";
 
-type Test = "login" | "bank_accounts" | "new_transactions" | "transaction_details" | "transactions_feed" | "user_settings";
+type Test =
+  | "login"
+  | "bank_accounts"
+  | "new_transactions"
+  | "transaction_details"
+  | "transactions_feed"
+  | "user_settings";
 
 /**
  *
@@ -34,12 +40,12 @@ export async function getUsersForTest(test: Test) {
     return [users[4], users[5], users[6]];
   }
 
-  if (test === 'transactions_feed') {
-    return [ users[7] ];
+  if (test === "transactions_feed") {
+    return [users[7]];
   }
 
-  if (test === 'user_settings') {
-    return [ users[8] ]
+  if (test === "user_settings") {
+    return [users[8]];
   }
 
   return [];
