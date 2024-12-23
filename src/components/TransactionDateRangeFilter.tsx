@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { format as formatDate } from "date-fns";
+import { endOfDay, format as formatDate, startOfDay } from "date-fns";
 import { Popover, Chip, useTheme, Drawer, Button, useMediaQuery, colors } from "@mui/material";
 import { ArrowDropDown as ArrowDropDownIcon, Cancel as CancelIcon } from "@mui/icons-material";
 import InfiniteCalendar, { Calendar, withRange } from "react-infinite-calendar";
@@ -49,8 +49,8 @@ const TransactionListDateRangeFilter: React.FC<TransactionListDateRangeFilterPro
   const onCalendarSelect = (e: { eventType: number; start: any; end: any }) => {
     if (e.eventType === 3) {
       filterDateRange({
-        dateRangeStart: new Date(e.start.setUTCHours(0, 0, 0, 0)).toISOString(),
-        dateRangeEnd: new Date(e.end.setUTCHours(23, 59, 59, 999)).toISOString(),
+        dateRangeStart: startOfDay(new Date(e.start)).toISOString(),
+        dateRangeEnd: endOfDay(new Date(e.end)).toISOString(),
       });
       setDateRangeAnchorEl(null);
     }
